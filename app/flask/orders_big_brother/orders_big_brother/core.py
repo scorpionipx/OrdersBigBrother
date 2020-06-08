@@ -1,9 +1,24 @@
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, Response, session
-from orders_big_brother.config import Config as CFG
+# from orders_big_brother.config import Config as CFG
 import operator
 import requests
 import json
+
+
+class Config(object):
+    SECRET_KEY = "#vai@-09gm$wwv$*gy@xu$&jwi#44h0&rm%^(b%)#*w!07uj*m"
+    HOST = "b278a96d287e.ngrok.io"
+
+    SHOPIFY_CONFIG = {
+        'API_KEY': 'bbd4918eab1fd4070e055ae17da6f176',
+        'API_SECRET': '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',
+        'APP_HOME': 'http://' + HOST,
+        'CALLBACK_URL': 'http://' + HOST + '/install',
+        'REDIRECT_URI': 'http://' + HOST + '/connect',
+        'SCOPE': 'read_products, read_collection_listings, read_orders, read_customers',
+    }
+
 
 app = Flask(__name__, template_folder="templates")
 app.debug = True
