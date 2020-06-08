@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="products_sold_by_period" method="POST">
+        <table class="table">
+            <tr>
+                <th colspan="2">Chose period</th>
+            </tr>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="date" id="start" name="period-start" value="2020-06-02" min="2020-01-01" max="2020-12-31">
+                </td>
+                <td>
+                    <input type="date" id="end" name="period-end" value="2020-06-03" min="2020-01-01" max="2020-12-31">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <table class="table">
+        <tr>
+            <th>{{ number_of_orders }} orders</th>
+            <th>{{ start }} - {{ end }}</th>
+            <th>Total: {{ total_value }}</th>
+            <th>{{ total_number_of_products }} products</th>
+        </tr>
+        <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Payment</th>
+            <th>Value</th>
+            <th>Payment status</th>
+            <th># Products</th>
+        </tr>
+        {% for order in orders_from_interval %}
+            <tr>
+                <td>{{ order.pk }}</td>
+                <td>{{ order.created_at }}</td>
+                <td>{{ order.payment }}</td>
+                <td>{{ order.value }}{{ order.currency }}</td>
+                <td>{{ order.financial_status }}</td>
+                <td>{{ order.number_of_products }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th>{{ number_of_orders }} orders</th>
+            <th>{{ start }} - {{ end }}</th>
+            <th>Total: {{ total_value }}</th>
+            <th>{{ total_number_of_products }} products</th>
+        </tr>
+    </table>
+
+    <br><br>
+    <table class="table">
+        <tr>
+            <th>Payment method</th>
+            {% for k, v in payment_gateways.items() %}
+                {% for i, j in v.items() if loop.first %}
+                    <th> {{ i }} </th>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        {% for k, v in payment_gateways.items() %}
+            <tr>
+                <th>{{ k }}</th>
+                {% for i, j in v.items() %}
+                    <td> {{ j['value'] }} / #{{ j['orders'] }} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock content %}

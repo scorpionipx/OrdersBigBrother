@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+
+{% block menu %}
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Statistics overview</a></li>
+    <li class="active"><a href="money_by_day">Performance by day</a></li>
+{% endblock menu %}
+
+
+{% block content %}
+    <div id="mpd_chart" style="width: 1024px; height: 500px; "></div>
+    <div id="noo_chart" style="width: 1024px; height: 500px; "></div>
+{% endblock content %}
+
+
+{% block ipx_scripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart()
+        {
+            var data = google.visualization.arrayToDataTable([
+                ['Date', 'Money', ],
+                {% for sale in mbd %}
+                    ['{{ sale.date }}', {{ sale.money }}, ],
+                {% endfor %}
+            ]);
+
+            var options = {
+                title: 'Company Performance - Money by day',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('mpd_chart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart()
+        {
+            var data = google.visualization.arrayToDataTable([
+                ['Date', 'Orders', ],
+                {% for sale in mbd %}
+                    ['{{ sale.date }}', {{ sale.noo }}, ],
+                {% endfor %}
+            ]);
+
+            var options = {
+                title: 'Company Performance - orders by day',
+                curveType: 'function',
+                legend: { position: 'bottom' },
+            colors:['red'],
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('noo_chart'));
+
+        chart.draw(data, options);
+        }
+    </script>
+{% endblock ipx_scripts %}

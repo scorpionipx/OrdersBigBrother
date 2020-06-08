@@ -16,6 +16,31 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from . import views as base_views
+
+# connect_path = path(
+#     r'connect',
+#     base_views.ConnectView.as_view(),
+#     name='connect',
+# )
+#
+# home_path = path(
+#     r'',
+#     base_views.HomePageView.as_view(),
+#     name='home',
+# )
+#
+# install_path = path(
+#     r'install',
+#     base_views.InstallView.as_view(),
+#     name='install',
+# )
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('login/', base_views.login, name='shopify_app_login'),
+    path('install', base_views.authenticate, name='shopify_app_authenticate'),
+    path('connect', base_views.finalize, name='shopify_app_login_finalize'),
+    path('logout/', base_views.logout, name='shopify_app_logout'),
 ]

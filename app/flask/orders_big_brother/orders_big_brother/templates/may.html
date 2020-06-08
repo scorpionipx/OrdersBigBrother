@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block menu %}
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Statistics overview</a></li>
+    <li><a href="#">Performance by day</a></li>
+    <li class="active"><a href="money_by_day">may</a></li>
+{% endblock menu %}
+
+{% block content %}
+    <ul>
+        {% for order in may_orders %}
+            <li>
+                {{ order }}
+            </li>
+        {% endfor %}
+    </ul>
+    <p>Total: {{ total }}</p>
+{% endblock content %}

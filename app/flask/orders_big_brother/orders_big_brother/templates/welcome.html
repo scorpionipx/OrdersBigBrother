@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body style="margin: 0 auto; padding:20%; background-color: lightgrey; ">
+    <h1>Welcome Shopify App Developer!</h1>
+
+    <div>
+      <ul>
+        <li>PERIOD: {{ sp }} - {{ ep }}</li>
+        <li>TOTAL: {{ total }}</li>
+        <li>AOV: {{ aov }}</li>
+        <li>ORDERS: {{ noo }}</li>
+        <li>LTV: {{ ltv }}</li>
+      </ul>
+    </div>
+
+    <div id="curve_chart" style="width: 800px; "></div>
+    <br>
+    <div id="noo_chart" style="width: 800px; "></div>
+    <br>
+    <div id="calendar_basic"></div>
+    <br>
+    <div id="piechart" style="width: 900px; height: 300px;"></div>
+    <br>
+
+
+    <div align="left" style="background-color: lightblue; ">
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>ID</th>
+                <th>Orders</th>
+                <th>$ Spent</th>
+                <th>State</th>
+            </tr>
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ customer.pk }}</td>
+                    <td>{{ customer.orders_count }}</td>
+                    <td>{{ customer.total_spent }}{{ customer.currency }}</td>
+                    <td>{{ customer.state }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Entry', 'RON'],
+          ['Profit',     {{ 2334.52 - 245 - 160.78}}],
+          ['Marketing',      160.78],
+          ['COGS',  245],
+        ]);
+
+        var options = {
+          title: 'Money entries'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Money', ],
+          {% for sale in mbd %}
+            ['{{ sale.date }}', {{ sale.money }}, ],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Company Performance - Money by day',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Orders', ],
+          {% for sale in mbd %}
+            ['{{ sale.date }}', {{ sale.noo }}, ],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Company Performance - orders by day',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          colors:['red'],
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('noo_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <script type="text/javascript">
+      google.load("visualization", "1.1", {packages:["calendar"]});
+      google.setOnLoadCallback(drawChart);
+
+   function drawChart() {
+       var dataTable = new google.visualization.DataTable();
+       dataTable.addColumn({ type: 'date', id: 'Date' });
+       dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+       dataTable.addRows([
+          {% for sale in mbd %}
+            [ new Date({{sale.year}}, {{sale.month}}, {{sale.day}}), {{sale.money}} ],
+          {% endfor %}
+          [ new Date(2020, 5, 10), 38177 ],
+          [ new Date(2020, 5, 11), 38705 ],
+          [ new Date(2020, 5, 12), 38210 ],
+          [ new Date(2020, 5, 13), 38029 ],
+          [ new Date(2020, 5, 14), 38823 ],
+          [ new Date(2020, 5, 15), 38345 ],
+          [ new Date(2020, 5, 16), 38436 ],
+          [ new Date(2020, 5, 17), 38447 ],
+        ]);
+
+       var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+       var options = {
+         title: "Income per day",
+         height: 350,
+       };
+
+       chart.draw(dataTable, options);
+   }
+    </script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

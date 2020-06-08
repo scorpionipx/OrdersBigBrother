@@ -1,1 +1,5 @@
 app/orders_big_brother/.idea/
+*.pyc
+app/flask/orders_big_brother/venv/
+app/flask/orders_big_brother/venv_27/
+app/flask/orders_big_brother/.idea/
