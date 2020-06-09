@@ -8,7 +8,7 @@ import json
 
 class Config(object):
     SECRET_KEY = "#vai@-09gm$wwv$*gy@xu$&jwi#44h0&rm%^(b%)#*w!07uj*m"
-    HOST = "b278a96d287e.ngrok.io"
+    HOST = "31.22.7.200:8080"
 
     SHOPIFY_CONFIG = {
         'API_KEY': 'bbd4918eab1fd4070e055ae17da6f176',
